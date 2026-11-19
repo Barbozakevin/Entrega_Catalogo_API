@@ -1,0 +1,18 @@
+require('dotenv').config();
+const express = require('express');
+const helmet = require('helmet');
+const authRoutes = require('./routes/authRoutes');
+const productRoutes = require('./routes/productRoutes');
+const favoriteRoutes = require('./routes/favoriteRoutes');
+const { notFound, errorHandler } = require('./middleware/errors');
+const app = express();
+app.disable('x-powered-by');
+app.use(helmet());
+app.use(express.json({ limit: '100kb' }));
+app.get('/health', (req, res) => res.json({ data: { status: 'ok' } }));
+app.use('/api/auth', authRoutes);
+app.use('/api/productos', productRoutes);
+app.use('/api/favoritos', favoriteRoutes);
+app.use(notFound);
+app.use(errorHandler);
+module.exports = app;
